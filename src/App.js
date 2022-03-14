@@ -10,9 +10,7 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/recognition" element={<Recognition />}>
-          
-        </Route>
+        <Route path="/" element={<Recognition />} />
       </Routes>
     </BrowserRouter>
   );

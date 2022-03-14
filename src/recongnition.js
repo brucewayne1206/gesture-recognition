@@ -2,8 +2,10 @@
 import React, { useRef, useState, useEffect } from "react";
 
 
+// eslint-disable-line no-unused-vars
+import * as tf from "@tensorflow/tfjs"; // eslint-disable-line no-unused-vars
+// eslint-disable-line no-unused-vars
 
-import * as tf from "@tensorflow/tfjs";
 import * as handpose from "@tensorflow-models/handpose";
 import Webcam from "react-webcam";
 import "./App.css";
@@ -11,8 +13,7 @@ import { drawHand } from "./utils";
 
 
 import * as fp from "fingerpose";
-import victory from "./victory.png";
-import thumbs_up from "./thumbs_up.png";
+import { helloDescription, okDescription, loveDescription, thumbsUpDescription, victoryDescription } from './handgestures';
 
 
 function App() {
@@ -21,7 +22,13 @@ function App() {
 
 
   const [emoji, setEmoji] = useState(null);
-  const images = { thumbs_up: thumbs_up, victory: victory };
+  const description = {
+    thumbs_up: 'Good job',
+    victory: 'Peace',
+    hello: 'Hello',
+    ok: 'Okay!',
+    love: 'Love You'
+  };
 
 
   const runHandpose = async () => {
@@ -57,8 +64,11 @@ function App() {
 
       if (hand.length > 0) {
         const GE = new fp.GestureEstimator([
-          fp.Gestures.VictoryGesture,
-          fp.Gestures.ThumbsUpGesture,
+          victoryDescription,
+          thumbsUpDescription,
+          helloDescription,
+          okDescription,
+          loveDescription
         ]);
         const gesture = await GE.estimate(hand[0].landmarks, 4);
         if (gesture.gestures !== undefined && gesture.gestures.length > 0) {
@@ -77,7 +87,9 @@ function App() {
     }
   };
 
-  useEffect(()=>{runHandpose()},[]);
+  // eslint-disable-line react-hooks/exhaustive-deps
+  useEffect(()=>{runHandpose()},[]); // eslint-disable-line react-hooks/exhaustive-deps
+  // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <div className="App">
@@ -85,47 +97,46 @@ function App() {
         <Webcam
           ref={webcamRef}
           style={{
+            margin: "auto",
             position: "absolute",
-            marginLeft: "auto",
-            marginRight: "auto",
+            top: 0,
             left: 0,
-            right: 0,
-            textAlign: "center",
-            zindex: 9,
-            width: 640,
-            height: 480,
+            bottom: 0,
+            right: 0
           }}
         />
 
         <canvas
           ref={canvasRef}
           style={{
+            margin: "auto",
             position: "absolute",
-            marginLeft: "auto",
-            marginRight: "auto",
+            top: 0,
             left: 0,
-            right: 0,
-            textAlign: "center",
-            zindex: 9,
-            width: 640,
-            height: 480,
+            bottom: 0,
+            right: 0
           }}
         />
         {/* NEW STUFF */}
         {emoji !== null ? (
-          <img
-            src={images[emoji]}
-            style={{
-              position: "absolute",
-              marginLeft: "auto",
-              marginRight: "auto",
-              left: 400,
-              bottom: 500,
-              right: 0,
-              textAlign: "center",
-              height: 100,
-            }}
-          />
+          <div
+          style={{
+            position: "absolute",
+            marginLeft: "auto",
+            marginRight: "auto",
+            left: 0,
+            bottom: 100,
+            right: 0,
+            textAlign: "center",
+            height: 100,
+            fontWeight: "bold",
+            fontSize: 40,
+            fontStyle: "oblique",
+            fontVariant: "petite-caps"
+          }}
+        >
+          {description[emoji]}
+        </div>
         ) : (
           ""
         )}
